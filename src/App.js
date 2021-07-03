@@ -7,7 +7,7 @@ import Form from "./pages/Form";
 import React, { useState, useEffect } from "react";
 
 // Import components from React Router
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 
 function App(props) {
   ////////////////////
@@ -19,6 +19,13 @@ function App(props) {
     margin: "10px",
   };
 
+  const button = {
+    backgroundColor: "navy",
+    display: "block",
+    margin:"auto",
+  };
+
+
   ///////////////
   // State & Other Variables
   ///////////////
@@ -29,6 +36,16 @@ function App(props) {
   // State to Hold The List of Posts
   const [posts, setPosts] = useState([]);
 
+  // an object that represents a null idea
+const nullIdea = {
+  subject: "",
+  details: "",
+};
+
+// const state to hold idea to edit
+
+const [targetIdea, setTargetIdea] = useState(nullIdea);
+
   //////////////
   // Functions
   //////////////
@@ -38,6 +55,51 @@ const getIdeas = async () => {
   const response = await fetch(url);
   const data = await response.json();
   setPosts(data);
+};
+
+// Function to add Idea from form data
+const addIdeas = async (newIdea) => {
+  const response = await fetch(url, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newIdea),
+  });
+
+  // get updated list of Ideas
+  getIdeas();
+};
+
+// Function to select idea to edit
+const getTargetIdea = (idea) => {
+  setTargetIdea(idea);
+  props.history.push("/edit");
+};
+
+// Function to edit idea on form submission
+const updateIdea = async (idea) => {
+  const response = await fetch(url + idea.id + "/", {
+    method: "put",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(idea),
+  });
+
+// get updated list of ideas
+getIdeas();
+};
+
+// Function to edit idea on form submission
+const deleteIdea = async (idea) => {
+  const response = await fetch(url + idea.id + "/", {
+    method: "delete",
+  });
+
+  // get updated list of ideas
+  getIdeas();
+  props.history.push("/");
 };
 
 //////////////
@@ -55,6 +117,7 @@ useEffect(() => {
   return (
     <div>
       <h1 style={h1}>Ideas</h1>
+      <Link to="/new"><button style={button}>Create New Idea</button></Link>
       <Switch>
         <Route
           exact
@@ -64,16 +127,26 @@ useEffect(() => {
         <Route
           path="/post/:id"
           render={(routerProps) => (
-            <SinglePost {...routerProps} posts={posts} />
+            <SinglePost {...routerProps} posts={posts} edit={getTargetIdea} deleteIdea={deleteIdea}/>
           )}
         />
         <Route
           path="/new"
-          render={(routerProps) => <Form {...routerProps} />}
+          render={(routerProps) => (<Form {...routerProps} 
+          initialIdea={nullIdea}
+          handleSubmit={addIdeas}
+          buttonLabel="create idea"
+          />
+         )}
         />
         <Route
           path="/edit"
-          render={(routerProps) => <Form {...routerProps} />}
+          render={(routerProps) => (<Form {...routerProps} 
+          initialIdea={targetIdea}
+          handleSubmit={updateIdea}
+          buttonLabel="update idea"
+          />
+          )}
         />
       </Switch>
     </div>
