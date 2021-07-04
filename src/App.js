@@ -31,7 +31,7 @@ function App(props) {
   ///////////////
 
   // Our Api Url
-  const url = "https://idea-backend.herokuapp.com/";
+  const url = "https://ideas-backend.herokuapp.com/";
 
   // State to Hold The List of Posts
   const [posts, setPosts] = useState([]);
