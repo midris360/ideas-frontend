@@ -118,6 +118,8 @@ useEffect(() => {
     <div>
       <h1 style={h1}>Ideas</h1>
       <Link to="/new"><button style={button}>Create New Idea</button></Link>
+      <Link to="/edit"><button style={button}>Edit Idea</button></Link>
+      <Link to="/"><button style={button}>Delete</button></Link>
       <Switch>
         <Route
           exact
