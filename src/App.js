@@ -31,15 +31,15 @@ function App(props) {
   ///////////////
 
   // Our Api Url
-  const url = "https://ideas-backend.herokuapp.com/";
+  const url = "https://idea-backend.herokuapp.com/";
 
   // State to Hold The List of Posts
   const [posts, setPosts] = useState([]);
 
   // an object that represents a null idea
 const nullIdea = {
-  subject: "",
-  details: "",
+  title: "",
+  body: "",
 };
 
 // const state to hold idea to edit
@@ -82,7 +82,7 @@ const updateIdea = async (idea) => {
   const response = await fetch(url + idea.id + "/", {
     method: "put",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
     body: JSON.stringify(idea),
   });
@@ -92,14 +92,14 @@ getIdeas();
 };
 
 // Function to edit idea on form submission
-const deleteIdea = async (idea) => {
-  const response = await fetch(url + idea.id + "/", {
-    method: "delete",
+const deleteIdea = async(idea) => {
+  const response = await fetch (url + idea.id + "/", {
+    method: "delete"
   });
 
   // get updated list of ideas
   getIdeas();
-  props.history.push("/");
+  // props.history.push("/");
 };
 
 //////////////
