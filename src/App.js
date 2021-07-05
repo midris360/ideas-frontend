@@ -1,6 +1,6 @@
 // Import All Our Components
-import AllPosts from "./pages/AllPosts";
-import SinglePost from "./pages/SinglePost";
+import AllIdeas from "./pages/AllIdeas";
+import SingleIdea from "./pages/SingleIdea";
 import Form from "./pages/Form";
 
 // Import React and hooks
@@ -33,8 +33,8 @@ function App(props) {
   // Our Api Url
   const url = "https://idea-backend.herokuapp.com/";
 
-  // State to Hold The List of Posts
-  const [posts, setPosts] = useState([]);
+  // State to Hold The List of Ideas
+  const [ideas, setIdeas] = useState([]);
 
   // an object that represents a null idea
 const nullIdea = {
@@ -54,13 +54,13 @@ const [targetIdea, setTargetIdea] = useState(nullIdea);
 const getIdeas = async () => {
   const response = await fetch(url);
   const data = await response.json();
-  setPosts(data);
+  setIdeas(data);
 };
 
 // Function to add Idea from form data
 const addIdeas = async (newIdea) => {
   const response = await fetch(url, {
-    method: "post",
+    method: "idea",
     headers: {
       "Content-Type": "application/json",
     },
@@ -79,7 +79,7 @@ const getTargetIdea = (idea) => {
 
 // Function to edit idea on form submission
 const updateIdea = async (idea) => {
-  const response = await fetch(url + idea.id + "/", {
+  const response = await fetch(url + idea.id + "/idea/", {
     method: "put",
     headers: {
       "Content-Type": "application/json"
@@ -93,13 +93,13 @@ getIdeas();
 
 // Function to edit idea on form submission
 const deleteIdea = async(idea) => {
-  const response = await fetch (url + idea.id + "/", {
+  const response = await fetch (url + idea.id + "/idea/", {
     method: "delete"
   });
 
   // get updated list of ideas
   getIdeas();
-  // props.history.push("/");
+  props.history.push("/");
 };
 
 //////////////
@@ -124,12 +124,12 @@ useEffect(() => {
         <Route
           exact
           path="/"
-          render={(routerProps) => <AllPosts {...routerProps} posts={posts} />}
+          render={(routerProps) => <AllIdeas ideas = {ideas} {...routerProps}/>}
         />
         <Route
-          path="/post/:id"
+          path="/idea/:id"
           render={(routerProps) => (
-            <SinglePost {...routerProps} posts={posts} edit={getTargetIdea} deleteIdea={deleteIdea}/>
+            <SingleIdea {...routerProps} ideas={ideas} edit={getTargetIdea} deleteIdea={deleteIdea}/>
           )}
         />
         <Route

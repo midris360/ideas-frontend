@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 //destructure the post from props
-const Post = ({ post }) => {
+const Idea = ({ idea }) => {
   //////////////////
   // Style Objects
   //////////////////
@@ -14,12 +14,12 @@ const Post = ({ post }) => {
   };
   return (
     <div style={div}>
-      <Link to={`/post/${post.id}`}>
-        <h1>{post.subject}</h1>
+      <Link to={`/idea/${idea.id}`}>
+        <h1>{idea.title}</h1>
       </Link>
-      <h2>{post.details}</h2>
+      <h2>{idea.body}</h2>
     </div>
   );
 };
 
-export default Post;
+export default Idea;
