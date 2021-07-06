@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 // destructuring the props needed to get our idea, including router prop match
-const SingleIdea = ({ ideas, match, edit, deleteIdea }) => {
-  const id = parseInt(match.params.id); //get the id from url param
-  const idea = ideas.find((idea) => idea.id === id);
+const SinglePost = ({ posts, match, edit, deleteIdea }) => {
+const id = parseInt(match.params.id); //get the id from url param
+const post = posts.find((post) => post.id === id);
 
   ////////////////////
   // Styles
@@ -16,12 +16,16 @@ const SingleIdea = ({ ideas, match, edit, deleteIdea }) => {
     margin: "30px auto",
   };
 
+  const button = {
+    margin: "20px",
+  }
+
   return (
     <div style={div}>
-      <h1>{idea.title}</h1>
-      <h2>{idea.body}</h2>
-      <button onClick={(event) => edit(idea)}>Edit</button>
-      <button onClick={(event) => deleteIdea(idea)}>Delete</button>
+      <h1>{post.title}</h1>
+      <h2>{post.body}</h2>
+      <button onClick={(event) => edit(post)}>Edit</button>
+      <button onClick={(event) => deleteIdea(post)}>Delete</button>
       <Link to="/">
         <button>Go Back</button>
       </Link>
@@ -29,4 +33,4 @@ const SingleIdea = ({ ideas, match, edit, deleteIdea }) => {
   );
 };
 
-export default SingleIdea;
+export default SinglePost;

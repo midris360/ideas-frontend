@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 
 //destructure out props, including router prop history
-const Form = ({ initialIdea, handleSubmit, buttonLabel, history }) => {
+const Form = ({ initialIdea, history, handleSubmit, buttonLabel }) => {
   ////////////////
   // The Form Data State
   ////////////////

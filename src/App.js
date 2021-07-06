@@ -1,6 +1,6 @@
 // Import All Our Components
-import AllIdeas from "./pages/AllIdeas";
-import SingleIdea from "./pages/SingleIdea";
+import AllPosts from "./pages/AllPosts";
+import SinglePost from "./pages/SinglePost";
 import Form from "./pages/Form";
 
 // Import React and hooks
@@ -31,20 +31,10 @@ function App(props) {
   ///////////////
 
   // Our Api Url
-  const url = "https://idea-backend.herokuapp.com/";
+  const url = "https://idea-backend.herokuapp.com/ideas";
 
   // State to Hold The List of Ideas
-  const [ideas, setIdeas] = useState([]);
-
-  // an object that represents a null idea
-const nullIdea = {
-  title: "",
-  body: "",
-};
-
-// const state to hold idea to edit
-
-const [targetIdea, setTargetIdea] = useState(nullIdea);
+  const [posts, setPosts] = useState([]);
 
   //////////////
   // Functions
@@ -54,13 +44,13 @@ const [targetIdea, setTargetIdea] = useState(nullIdea);
 const getIdeas = async () => {
   const response = await fetch(url);
   const data = await response.json();
-  setIdeas(data);
+  setPosts(data);
 };
 
 // Function to add Idea from form data
 const addIdeas = async (newIdea) => {
-  const response = await fetch(url, {
-    method: "idea",
+  const response = await fetch(url + "ideas", {
+    method: "post",
     headers: {
       "Content-Type": "application/json",
     },
@@ -71,6 +61,16 @@ const addIdeas = async (newIdea) => {
   getIdeas();
 };
 
+ // an object that represents a null idea
+ const nullIdea = {
+  title: "",
+  body: "",
+};
+
+// const state to hold idea to edit
+
+const [targetIdea, setTargetIdea] = useState(nullIdea);
+
 // Function to select idea to edit
 const getTargetIdea = (idea) => {
   setTargetIdea(idea);
@@ -79,7 +79,7 @@ const getTargetIdea = (idea) => {
 
 // Function to edit idea on form submission
 const updateIdea = async (idea) => {
-  const response = await fetch(url + idea.id + "/idea/", {
+  const response = await fetch(url + idea.id + "/", {
     method: "put",
     headers: {
       "Content-Type": "application/json"
@@ -87,13 +87,23 @@ const updateIdea = async (idea) => {
     body: JSON.stringify(idea),
   });
 
+
+  // const updateIdea = async (idea) => {
+  //   const response = await fetch(url + idea.id + "/idea/", {
+  //     method: "put",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify(idea),
+  //   });
+
 // get updated list of ideas
 getIdeas();
 };
 
 // Function to edit idea on form submission
 const deleteIdea = async(idea) => {
-  const response = await fetch (url + idea.id + "/idea/", {
+  const response = await fetch(url + idea.id + "/", {
     method: "delete"
   });
 
@@ -124,29 +134,31 @@ useEffect(() => {
         <Route
           exact
           path="/"
-          render={(routerProps) => <AllIdeas ideas = {ideas} {...routerProps}/>}
+          render={(rp) => <AllPosts posts = {posts} {...rp}/>}
         />
         <Route
-          path="/idea/:id"
-          render={(routerProps) => (
-            <SingleIdea {...routerProps} ideas={ideas} edit={getTargetIdea} deleteIdea={deleteIdea}/>
+          path="/post/:id"
+          render={(rp) => (
+            <SinglePost posts={posts} edit={getTargetIdea} deleteIdea={deleteIdea} {...rp}/>
           )}
         />
         <Route
           path="/new"
-          render={(routerProps) => (<Form {...routerProps} 
+          render={(routerProps) => (<Form 
           initialIdea={nullIdea}
           handleSubmit={addIdeas}
           buttonLabel="create idea"
+          {...routerProps}
           />
          )}
         />
         <Route
           path="/edit"
-          render={(routerProps) => (<Form {...routerProps} 
+          render={(routerProps) => (<Form 
           initialIdea={targetIdea}
           handleSubmit={updateIdea}
           buttonLabel="update idea"
+          {...routerProps}
           />
           )}
         />
